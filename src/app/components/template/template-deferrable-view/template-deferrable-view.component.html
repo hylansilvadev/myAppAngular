@@ -1,0 +1,89 @@
+<h2>Deferrable Views</h2>
+
+<!--
+
+on - especifica uma condição de acionador usando um acionador da lista.
+    (idle, timer, viewport, interaction, hover, immediate, prefech)
+
+when - especifica uma condição imperativa como uma expressão que retorna
+       um booleano. Quando esta expressão se torna verdadeira, o espaço
+       reservado é trocado pelo conteúdo carregado lentamente ( o que pode
+       ser uma operação assíncrona se as dependências precisarem ser buscadas).
+
+Nota: Vários on triggers são sempre condições OR. Da mesma forma, on misturado
+      com when também são condiçãoes OR.
+
+-->
+
+<!-- Usando o ON -->
+
+@defer (on interaction; prefetch on interaction(trigger)){
+<app-new-component />
+} @placeholder {
+<p #trigger>mostrar antes de carregar algo.</p>
+} @loading {
+<p>loading...</p>
+}@error {
+<p>loading failed</p>
+}
+
+<hr />
+
+<h4>Usando o WHEN</h4>
+<!-- Usando o WHEN -->
+
+<h2 #trigger>Deferrable Views</h2>
+<button (click)="isTrue = true">Add True</button>
+
+@defer (when loadingData$ | async ){
+<app-new-component />
+} @placeholder {
+<p #trigger>mostrar antes de carregar algo.</p>
+} @loading {
+<p>loading...</p>
+}@error {
+<p>loading failed</p>
+}
+
+<hr />
+
+<h4>Parametros no Placeholder</h4>
+
+@defer {
+<app-new-component />
+} @placeholder( minimum 5s){
+<p #trigger>mostrar antes de carregar algo.</p>
+} @loading {
+<p>loading...</p>
+}@error {
+<p>loading failed</p>
+}
+
+<hr>
+
+<h4>Parâmetros no loading</h4>
+
+@defer {
+<app-new-component />
+} @placeholder{
+<p #trigger>mostrar antes de carregar algo.</p>
+} @loading(after 150ms; minimum 5s) {
+<p>loading...</p>
+}@error {
+<p>loading failed</p>
+}
+
+
+<hr>
+
+<h4>Parâmetros no error</h4>
+
+@defer {
+<app-new-component />
+} @placeholder{
+<p #trigger>mostrar antes de carregar algo.</p>
+} @loading(after 150ms; minimum 5s) {
+<p>loading...</p>
+}@error {
+<p>loading failed</p>
+}

@@ -1,0 +1,156 @@
+<h2>Control flow</h2>
+
+<h3>IF</h3>
+
+<!-- Forma nova -->
+
+@if (isTrue) {
+
+<p>Hylan</p>
+<p>Ester</p>
+
+} @else if(1 === 1){ 1 É === 1 } @else { Não está correto }
+
+<!-- Forma Antiga -->
+
+<ng-container *ngIf="isTrue; else isFalse">
+  <p>Hylan</p>
+  <p>Ester</p>
+</ng-container>
+<ng-template #isFalse> Não está correto</ng-template>
+
+<h2>FOR</h2>
+
+<!-- FORMA NOVA -->
+
+<!-- IF mais FOR -->
+@if(loadingData$ | async ; as data) {
+<ul>
+  @for(item of data; track item) {
+  <li>{{ item }}</li>
+  }
+</ul>
+} @else { carregando... }
+
+<!-- Apenas o FOR -->
+<ul>
+  @for(item of loadingData$ | async ; track item) {
+  <li>{{ item }}</li>
+  }
+</ul>
+
+<!-- FORMA ANTIGA -->
+
+<ng-container *ngIf="loadingData$ | async as data; else loading">
+  <p>{{ data }}</p>
+</ng-container>
+<ng-template #loading><p>carregando...</p></ng-template>
+
+<ng-container *ngIf="loadingData$ | async as data; else loading">
+  <ul>
+    <ng-container *ngFor="let item of data; trackBy: trackByFn">
+      <li>{{ item }}</li>
+    </ng-container>
+  </ul>
+</ng-container>
+<ng-template #loading><p>carregando...</p></ng-template>
+
+<hr />
+
+<h3>Itens em um array</h3>
+
+<!-- Trackeando os itens do array -->
+
+<!-- FORMA NOVA -->
+
+@for ( item of itens; track item.name; let i = $index; let c = $count; let f =
+$first; let l = $last; let e = $even; let o = $odd; ) {
+<p>{{ item.name }}</p>
+<p>index - {{ i }}</p>
+<p>count - {{ c }}</p>
+<p>first - {{ f }}</p>
+<p>last - {{ l }}</p>
+<p>even - {{ e }}</p>
+<p>odd - {{ o }}</p>
+}
+
+<!-- FORMULA ANTIGA -->
+
+<ng-container
+  *ngFor="
+    let item of itens;
+    let i = index;
+    let c = count;
+    let f = first;
+    let l = last;
+    let e = even;
+    let o = odd;
+    trackBy: trackByFn
+  "
+>
+  <p>{{ item.name }}</p>
+  <p>index - {{ i }}</p>
+  <p>count - {{ c }}</p>
+  <p>first - {{ f }}</p>
+  <p>last - {{ l }}</p>
+  <p>even - {{ e }}</p>
+  <p>odd - {{ o }}</p>
+</ng-container>
+
+<input #name type="text" />
+<button (click)="addNewName(name.value)">Add name</button>
+
+<hr />
+
+<h2>Verificando valores dentro de um array</h2>
+
+<!-- FORMA NOVA -->
+<ul>
+  @for (item of itens; track item.name) {
+  <li>{{ item.name }}</li>
+  } @empty {
+  <li>Não contém valores</li>
+  }
+</ul>
+
+<!-- FORMA ANTIGA -->
+
+<ul>
+  <ng-container *ngIf="itens.length === 0; else itensExist">
+    <li>Não contém valores</li>
+  </ng-container>
+  <ng-template #itensExist>
+    <ng-container *ngFor="let item of itens">
+      <li>
+        {{ item.name }}
+      </li>
+    </ng-container>
+  </ng-template>
+</ul>
+
+<hr />
+
+<h2>SWITCH CASE</h2>
+
+<!-- NOVA FORMA -->
+@switch (switchCondition) { @case ('A') {
+<p>Sim sua letra é: A</p>
+} @case ('B') {
+<p>Sim sua letra é: B</p>
+} @default {
+<p>Os dados não foram encontrados</p>
+} }
+
+<!-- FORMA ANTIGA -->
+
+<ng-container [ngSwitch]="switchCondition">
+  <ng-container *ngSwitchCase="'A'">
+    <p>Sim sua letra é: A</p>
+  </ng-container>
+  <ng-container *ngSwitchCase="'B'">
+    <p>Sim sua letra é: B</p>
+  </ng-container>
+  <ng-container *ngSwitchDefault="">
+    <p>Os dados não foram encontrados</p>
+  </ng-container>
+</ng-container>
